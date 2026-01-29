@@ -7,6 +7,7 @@ from PyQt6.QtWidgets import (QFrame, QVBoxLayout, QHBoxLayout, QLabel,
 from PyQt6.QtCore import Qt, QDate, QTime, pyqtSignal, QSize, QRect, QPoint, QTimer, QEvent
 from PyQt6.QtGui import QAction, QCursor, QIcon, QColor, QPalette
 import os
+import sys
 import json
 import re
 
@@ -14,6 +15,22 @@ import re
 from examinationextra import SurdologyBlock, SickLeaveBlock, AdditionalBlock, DateInput, TimeInput, SymbolComboBox, EditableButton, NormButton, AutoResizingTextEdit, TemplateManagerDialog
 from operation import OperationBlock
 from commands import TextChangeCommand, CheckBoxCommand
+
+# --- Вспомогательные функции путей ---
+def get_resource_path(relative_path):
+    """ Получает путь к ресурсам (внутри EXE или в папке исходников) """
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), relative_path)
+
+def get_user_path(relative_path):
+    """ Получает путь для пользовательских файлов (рядом с EXE или исходником) """
+    if getattr(sys, 'frozen', False):
+        base_path = os.path.dirname(sys.executable)
+    else:
+        base_path = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(base_path, relative_path)
+# -------------------------------------
 
 class ExaminationPanel(QFrame):
     dateChanged = pyqtSignal(str)
@@ -71,11 +88,11 @@ class ExaminationPanel(QFrame):
         self.setStyleSheet("background-color: #2b2b2b; color: #ffffff;")
         self.setFrameShape(QFrame.Shape.StyledPanel)
         
-        self.icons_path = os.path.join(os.path.dirname(__file__), "Buttons")
+        # Иконки берем из ресурсов (внутри EXE)
+        self.icons_path = get_resource_path("Buttons")
         
-        # --- Инициализация папок шаблонов ---
-        self.base_dir = os.path.dirname(os.path.abspath(__file__))
-        self.templates_dir = os.path.join(self.base_dir, "Templates")
+        # Шаблоны берем из пользовательской папки (рядом с EXE)
+        self.templates_dir = get_user_path("Templates")
         self.specialty_dir = os.path.join(self.templates_dir, "Otorhinolaryngologist")
         self.exam_dir = os.path.join(self.specialty_dir, "Examination")
         self.operation_dir = os.path.join(self.specialty_dir, "Operation")
