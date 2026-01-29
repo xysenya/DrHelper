@@ -8,12 +8,29 @@ from PyQt6.QtWidgets import (QApplication, QMainWindow, QWidget, QHBoxLayout, QS
 from PyQt6.QtCore import Qt, QEvent, QUrl
 from PyQt6.QtGui import QAction, QIcon, QUndoStack, QKeySequence, QKeyEvent
 
-# Включаем обработчик ошибок для отладки крашей
-faulthandler.enable()
+# Включаем обработчик ошибок для отладки крашей, только если есть stderr
+if sys.stderr is not None:
+    faulthandler.enable()
 
 # Импортируем наши новые модули
 from paperspace import EditorPanel, A4Editor
 from workingspace import WorkingSpacePanel
+
+# --- Вспомогательные функции путей ---
+def get_resource_path(relative_path):
+    """ Получает путь к ресурсам (внутри EXE или в папке исходников) """
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), relative_path)
+
+def get_user_path(relative_path):
+    """ Получает путь для пользовательских файлов (рядом с EXE или исходником) """
+    if getattr(sys, 'frozen', False):
+        base_path = os.path.dirname(sys.executable)
+    else:
+        base_path = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(base_path, relative_path)
+# -------------------------------------
 
 class AboutDialog(QDialog):
     def __init__(self, parent=None):
@@ -27,8 +44,9 @@ class AboutDialog(QDialog):
         text_browser = QTextBrowser()
         text_browser.setStyleSheet("background-color: #3c3f41; border: 1px solid #555;")
         
-        # Загрузка контента из файла
-        signa_path = os.path.join(os.path.dirname(__file__), "Hints", "signa.html")
+        # Загрузка контента из файла (Hints внутри EXE)
+        signa_path = get_resource_path(os.path.join("Hints", "signa.html"))
+        
         if os.path.exists(signa_path):
             try:
                 # Сначала пробуем utf-8
@@ -46,7 +64,7 @@ class AboutDialog(QDialog):
             except Exception as e:
                 text_browser.setText(f"Ошибка при чтении файла справки: {e}")
         else:
-            text_browser.setText("Файл справки 'signa.html' не найден.")
+            text_browser.setText(f"Файл справки не найден по пути:\n{signa_path}")
             
         layout.addWidget(text_browser)
 
@@ -77,8 +95,8 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("DrHelper")
         self.resize(1200, 800)
         
-        # Установка иконки окна
-        icon_path = os.path.join(os.path.dirname(__file__), "icon.ico")
+        # Установка иконки окна (Внутри EXE)
+        icon_path = get_resource_path("icon.ico")
         if os.path.exists(icon_path):
             self.setWindowIcon(QIcon(icon_path))
             
@@ -448,7 +466,8 @@ class MainWindow(QMainWindow):
 
     def load_settings(self):
         config = configparser.ConfigParser()
-        ini_path = os.path.join(os.path.dirname(__file__), "Templates", "prefabs.ini")
+        # Используем get_user_path для загрузки настроек
+        ini_path = get_user_path(os.path.join("Templates", "prefabs.ini"))
         
         if os.path.exists(ini_path):
             config.read(ini_path, encoding='utf-8')
@@ -465,6 +484,9 @@ class MainWindow(QMainWindow):
                         self.splitter.setSizes(sizes)
                     except ValueError:
                         pass
+                
+                zoom = config.getint('Window', 'zoom', fallback=100)
+                self.editor_panel.set_zoom(zoom)
             
             if 'Doctor' in config:
                 doctor_name = config.get('Doctor', 'name', fallback="")
@@ -472,7 +494,8 @@ class MainWindow(QMainWindow):
 
     def save_settings(self):
         config = configparser.ConfigParser()
-        ini_path = os.path.join(os.path.dirname(__file__), "Templates", "prefabs.ini")
+        # Используем get_user_path для сохранения настроек
+        ini_path = get_user_path(os.path.join("Templates", "prefabs.ini"))
         
         # Создаем папку Templates, если её нет
         os.makedirs(os.path.dirname(ini_path), exist_ok=True)
@@ -480,7 +503,8 @@ class MainWindow(QMainWindow):
         config['Window'] = {
             'width': str(self.width()),
             'height': str(self.height()),
-            'splitter_sizes': ",".join(map(str, self.splitter.sizes()))
+            'splitter_sizes': ",".join(map(str, self.splitter.sizes())),
+            'zoom': str(self.editor_panel.get_zoom())
         }
         
         config['Doctor'] = {
@@ -497,8 +521,8 @@ class MainWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     
-    # Установка иконки приложения
-    icon_path = os.path.join(os.path.dirname(__file__), "icon.ico")
+    # Установка иконки приложения (Внутри EXE)
+    icon_path = get_resource_path("icon.ico")
     if os.path.exists(icon_path):
         app.setWindowIcon(QIcon(icon_path))
 

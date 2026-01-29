@@ -2015,6 +2015,9 @@ class EditorPanel(QWidget):
         self.view.resetTransform()
         self.view.scale(scale, scale)
 
+    def get_zoom(self):
+        return self.current_zoom
+
     def update_format_buttons_state(self):
         # Обновляем состояние кнопок форматирования при перемещении курсора
         cursor = self.editor.textCursor()
