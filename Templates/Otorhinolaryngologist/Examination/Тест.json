@@ -1,0 +1,137 @@
+{
+    "template_name": "Тест",
+    "data": {
+        "left": {
+            "indicators": {
+                "ad": "",
+                "temp": "",
+                "weight": ""
+            },
+            "additional": {
+                "paid": false,
+                "consent": true
+            },
+            "complaints_anamnesis": {
+                "complaints": "хуй",
+                "no_complaints": false,
+                "anamnesis": "лох",
+                "show_anamnesis_label": true
+            },
+            "objective": {
+                "ad_ear": "1234909",
+                "ad_vis": true,
+                "as_ear": "",
+                "as_vis": true,
+                "ad_as_comb": "",
+                "ad_as_vis": true,
+                "merge_ears": false,
+                "nasi": "",
+                "nasi_vis": true,
+                "pharynx": "",
+                "pharynx_vis": true,
+                "nasi_pharynx_comb": "",
+                "nasi_pharynx_vis": true,
+                "merge_nose_throat": false,
+                "larynx": "",
+                "larynx_vis": false,
+                "other": "",
+                "other_vis": false
+            },
+            "diagnosis": "",
+            "other_data": {
+                "repeat": false,
+                "repeat_date": "..",
+                "repeat_time": ":"
+            },
+            "recommendations": ""
+        },
+        "bilateral": {
+            "indicators": {
+                "ad": "",
+                "temp": "",
+                "weight": ""
+            },
+            "additional": {
+                "paid": false,
+                "consent": true
+            },
+            "complaints_anamnesis": {
+                "complaints": "хуй",
+                "no_complaints": false,
+                "anamnesis": "лох",
+                "show_anamnesis_label": true
+            },
+            "objective": {
+                "ad_ear": "1234909",
+                "ad_vis": true,
+                "as_ear": "2",
+                "as_vis": true,
+                "ad_as_comb": "",
+                "ad_as_vis": true,
+                "merge_ears": false,
+                "nasi": "3",
+                "nasi_vis": true,
+                "pharynx": "",
+                "pharynx_vis": true,
+                "nasi_pharynx_comb": "",
+                "nasi_pharynx_vis": true,
+                "merge_nose_throat": false,
+                "larynx": "",
+                "larynx_vis": false,
+                "other": "",
+                "other_vis": false
+            },
+            "diagnosis": "",
+            "other_data": {
+                "repeat": false,
+                "repeat_date": "..",
+                "repeat_time": ":"
+            },
+            "recommendations": ""
+        },
+        "right": {
+            "indicators": {
+                "ad": "",
+                "temp": "",
+                "weight": ""
+            },
+            "additional": {
+                "paid": false,
+                "consent": true
+            },
+            "complaints_anamnesis": {
+                "complaints": "хуй",
+                "no_complaints": false,
+                "anamnesis": "лох",
+                "show_anamnesis_label": true
+            },
+            "objective": {
+                "ad_ear": "1234909",
+                "ad_vis": true,
+                "as_ear": "2",
+                "as_vis": true,
+                "ad_as_comb": "",
+                "ad_as_vis": true,
+                "merge_ears": false,
+                "nasi": "3",
+                "nasi_vis": true,
+                "pharynx": "434233424",
+                "pharynx_vis": true,
+                "nasi_pharynx_comb": "",
+                "nasi_pharynx_vis": true,
+                "merge_nose_throat": false,
+                "larynx": "",
+                "larynx_vis": false,
+                "other": "",
+                "other_vis": false
+            },
+            "diagnosis": "",
+            "other_data": {
+                "repeat": false,
+                "repeat_date": "..",
+                "repeat_time": ":"
+            },
+            "recommendations": ""
+        }
+    }
+}
